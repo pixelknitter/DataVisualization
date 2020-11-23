@@ -3,15 +3,11 @@ import { Instance, SnapshotOut, types } from "mobx-state-tree"
 /**
  * User with a name and avatar
  */
-export const UserModel = types
-  .model("User")
-  .props({
-    id: types.optional(types.identifier, "-1"),
-    name: types.maybeNull(types.string),
-    avatar: types.maybeNull(types.string),
-  })
-  .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
-  .actions((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
+export const UserModel = types.model("User").props({
+  id: types.optional(types.identifier, "-1"),
+  name: types.maybeNull(types.string),
+  avatar: types.maybeNull(types.string),
+})
 
 type UserType = Instance<typeof UserModel>
 export interface User extends UserType {}

@@ -1,7 +1,7 @@
 /* eslint-disable generator-star-spacing */
 import { Instance, SnapshotOut, types, flow } from "mobx-state-tree"
 import { withEnvironment, withRootStore } from "../extensions"
-import { UserModel, UserSnapshot, User } from "../user/user"
+import { UserModel, User } from "../user/user"
 import { GetUsersResult } from "../../services/api"
 
 /**
@@ -10,7 +10,7 @@ import { GetUsersResult } from "../../services/api"
 export const UserStoreModel = types
   .model("UserStore")
   .props({
-    currentUser: types.optional(UserModel, () => UserModel.create({})),
+    currentUser: types.optional(types.safeReference(UserModel), undefined),
     availableUsers: types.optional(types.array(UserModel), []),
   })
   .extend(withEnvironment)
@@ -20,27 +20,17 @@ export const UserStoreModel = types
     /**
      * Populate the current user
      */
-    saveCurrentUser: (value: UserSnapshot | User) => {
+    saveCurrentUser: (value: User) => {
       __DEV__ && console.tron.debug(`setting a new user to: ${value}`)
-      self.currentUser = value as any
+      self.currentUser = value
     },
-    /**
-     * Resets the store
-     */
-    reset: () => {
-      self.currentUser = UserModel.create({})
-      self.availableUsers.clear()
-    },
-  }))
-  .actions((self) => ({
     /**
      * Populate the available users
      */
-    saveAvailableUsers: (value: (UserSnapshot | User)[]) => {
+    saveAvailableUsers: (value?: User[]) => {
       if (self.availableUsers) {
         if (value) {
-          self.currentUser = UserModel.create(value[0]) // set a default user
-          self.availableUsers.replace(value as any)
+          self.availableUsers.replace(value)
         } else {
           self.availableUsers.clear()
         }
@@ -50,6 +40,13 @@ export const UserStoreModel = types
     },
   }))
   .actions((self) => ({
+    /**
+     * Resets the store
+     */
+    reset: () => {
+      self.currentUser = undefined
+      self.availableUsers.clear()
+    },
     /**
      * Get the available users list
      */

@@ -1,4 +1,4 @@
-import { RootStore, RootStoreModel, UserModel } from "../"
+import { RootStore, RootStoreModel, UserModel, UserSnapshot } from "../"
 import { UserStoreModel, UserStore } from "./user-store"
 import { v1 as uuid } from "uuid"
 
@@ -17,9 +17,8 @@ describe("UserStore", () => {
     })
 
     test("has correct defaults", () => {
-      expect(model.currentUser.id).toEqual("-1")
-      expect(model.currentUser.name).toBeNull()
-      expect(model.currentUser.avatar).toBeNull()
+      expect(model.currentUser).toBeUndefined()
+      expect(model.availableUsers).toHaveLength(0)
     })
 
     test("resets properly", async (done) => {
@@ -49,40 +48,18 @@ describe("UserStore", () => {
 
     test("can save current user", () => {
       const instance: UserStore = UserStoreModel.create({} as any)
-      instance.saveCurrentUser({
+      const userSnapshot = {
         id: uuid(),
         name: "Eddie Freeman",
         avatar: "http://www.fillmurray.com/100/100",
-      })
+      } as UserSnapshot
+
+      instance.saveAvailableUsers([userSnapshot])
+      instance.saveCurrentUser(userSnapshot)
 
       expect(instance.currentUser.id).toBeDefined()
       expect(instance.currentUser.name).toEqual("Eddie Freeman")
       expect(instance.currentUser.avatar).toBeDefined()
     })
   })
-})
-
-test("can be created", () => {
-  const instance: UserStore = UserStoreModel.create()
-
-  expect(instance).toBeTruthy()
-})
-
-test("has correct defaults", () => {
-  const instance: UserStore = UserStoreModel.create()
-
-  expect(instance.currentUser).toEqual(UserModel.create({}))
-})
-
-test("can save current user", () => {
-  const instance: UserStore = UserStoreModel.create({} as any)
-  instance.saveCurrentUser({
-    id: uuid(),
-    name: "Eddie Freeman",
-    avatar: "http://www.fillmurray.com/200/200",
-  })
-
-  expect(instance.currentUser.id).toBeDefined()
-  expect(instance.currentUser.name).toEqual("Eddie Freeman")
-  expect(instance.currentUser.avatar).toBeDefined()
 })

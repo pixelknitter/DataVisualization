@@ -34,6 +34,7 @@ export const UsersScreen = observer(function UsersScreen() {
   const navigateOnTouch = useCallback(
     (item) => {
       setSelectedId(item.id)
+      __DEV__ && console.tron.debug(`selected user: ${item.id}`)
       saveCurrentUser(item)
       navigation.navigate("intervals")
     },
@@ -53,7 +54,7 @@ export const UsersScreen = observer(function UsersScreen() {
 
   if (loading) return <Loader message="Finding avatars..." />
 
-  __DEV__ && console.tron.debug(`current users: ${users}`)
+  __DEV__ && console.tron.debug(`available users: ${users}`)
 
   return (
     <Screen style={ROOT} preset="fixed">
