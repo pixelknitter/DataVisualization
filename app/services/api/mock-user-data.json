@@ -1,0 +1,19 @@
+{
+  "users": [
+    {
+      "id": "2228b530e055401f81ba37b51ff6f81d",
+      "name": "Baku",
+      "avatar": "https://www.fillmurray.com/100/100"
+    },
+    {
+      "id": "d6c1355e38194139b8d0c870baf86365",
+      "name": "Asibikaashi",
+      "avatar": "https://www.fillmurray.com/100/100"
+    },
+    {
+      "id": "2228b530e055401f81ba37b51ff6f81d",
+      "name": "Morpheus",
+      "avatar": "https://via.placeholder.com/100"
+    }
+  ]
+}

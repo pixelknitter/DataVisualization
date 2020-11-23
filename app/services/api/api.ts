@@ -2,6 +2,8 @@ import { ApisauceInstance, create, ApiResponse } from "apisauce"
 import { getGeneralApiProblem } from "./api-problem"
 import { ApiConfig, DEFAULT_API_CONFIG } from "./api-config"
 import * as Types from "./api.types"
+import { IntervalSnapshot, UserSnapshot } from "../../models"
+import mockUserData from "./mock-user-data.json"
 
 /**
  * Manages all requests to the API.
@@ -45,11 +47,11 @@ export class Api {
   }
 
   /**
-   * Gets a list of users.
+   * Gets a list of sleep intervals by user id.
    */
-  async getUsers(): Promise<Types.GetUsersResult> {
+  async getIntervals(userId: string): Promise<Types.GetIntervalsResult> {
     // make the api call
-    const response: ApiResponse<any> = await this.apisauce.get(`/users`)
+    const response: ApiResponse<any> = await this.apisauce.get(`/${userId}.json`)
 
     // the typical ways to die when calling an api
     if (!response.ok) {
@@ -57,46 +59,66 @@ export class Api {
       if (problem) return problem
     }
 
-    const convertUser = (raw) => {
+    // convert the raw values into objects
+    const convertSeriesValue = (raw) => {
+      return {
+        time: new Date(raw[0]),
+        value: raw[1],
+      }
+    }
+
+    const convertTimeseries = (raw) => {
+      return {
+        tnt: raw.tnt.map(convertSeriesValue),
+        tempRoomC: raw.tempRoomC.map(convertSeriesValue),
+        tempBedC: raw.tempBedC.map(convertSeriesValue),
+        respiratoryRate: raw.respiratoryRate.map(convertSeriesValue),
+        heartRate: raw.heartRate.map(convertSeriesValue),
+        heating: raw.heating.map(convertSeriesValue),
+      }
+    }
+
+    const convertInterval = (raw) => {
       return {
         id: raw.id,
-        name: raw.name,
+        ts: new Date(raw.ts),
+        stages: raw.stages,
+        timeseries: convertTimeseries(raw.timeseries),
       }
     }
 
     // transform the data into the format we are expecting
     try {
-      const rawUsers = response.data
-      const resultUsers: Types.User[] = rawUsers.map(convertUser)
-      return { kind: "ok", users: resultUsers }
+      const rawIntervals = response.data.intervals
+      const resultIntervals: IntervalSnapshot[] = rawIntervals.intervals.map(convertInterval)
+      return { kind: "ok", intervals: resultIntervals }
+    } catch {
+      return { kind: "bad-data" }
+    }
+  }
+
+  async getUsers(): Promise<Types.GetUserResult> {
+    // make the *mock* api call
+    const response = mockUserData.users
+
+    // transform the data into the format we are expecting
+    try {
+      const resultUser: UserSnapshot = this.convertUser(response)
+      return { kind: "ok", user: resultUser }
     } catch {
       return { kind: "bad-data" }
     }
   }
 
   /**
-   * Gets a single user by ID
+   * Converts an object into an MST acceptable UserSnapshot
+   * @param raw - the object to convert into a user
    */
-
-  async getUser(id: string): Promise<Types.GetUserResult> {
-    // make the api call
-    const response: ApiResponse<any> = await this.apisauce.get(`/users/${id}`)
-
-    // the typical ways to die when calling an api
-    if (!response.ok) {
-      const problem = getGeneralApiProblem(response)
-      if (problem) return problem
-    }
-
-    // transform the data into the format we are expecting
-    try {
-      const resultUser: Types.User = {
-        id: response.data.id,
-        name: response.data.name,
-      }
-      return { kind: "ok", user: resultUser }
-    } catch {
-      return { kind: "bad-data" }
+  convertUser = (raw: any): UserSnapshot => {
+    return {
+      id: raw.id,
+      name: raw.name,
+      avatar: raw.avatar,
     }
   }
 }

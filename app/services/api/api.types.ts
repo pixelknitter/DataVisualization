@@ -1,9 +1,6 @@
 import { GeneralApiProblem } from "./api-problem"
+import { UserSnapshot, IntervalSnapshot } from "../../models"
 
-export interface User {
-  id: number
-  name: string
-}
+export type GetIntervalsResult = { kind: "ok"; intervals: IntervalSnapshot[] } | GeneralApiProblem
 
-export type GetUsersResult = { kind: "ok"; users: User[] } | GeneralApiProblem
-export type GetUserResult = { kind: "ok"; user: User } | GeneralApiProblem
+export type GetUsersResult = { kind: "ok"; user: UserSnapshot } | GeneralApiProblem
