@@ -1,7 +1,7 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 
 /**
- * Model description here for TypeScript hints.
+ * User with a name and avatar
  */
 export const UserModel = types
   .model("User")

@@ -1,7 +1,7 @@
 /* eslint-disable generator-star-spacing */
 import { Instance, SnapshotOut, types, flow } from "mobx-state-tree"
 import { withEnvironment, withRootStore } from "../extensions"
-import { UserModel, UserSnapshot, User } from ".."
+import { UserModel, UserSnapshot, User } from "../user/user"
 import { GetUsersResult } from "../../services/api"
 
 /**
@@ -11,7 +11,7 @@ export const UserStoreModel = types
   .model("UserStore")
   .props({
     currentUser: types.optional(UserModel, () => UserModel.create({})),
-    availableUsers: types.maybeNull(types.array(UserModel)),
+    availableUsers: types.optional(types.array(UserModel), []),
   })
   .extend(withEnvironment)
   .extend(withRootStore)
@@ -28,16 +28,36 @@ export const UserStoreModel = types
      */
     reset: () => {
       self.currentUser = UserModel.create({})
-      self.availableUsers = null
+      self.availableUsers.clear()
     },
   }))
   .actions((self) => ({
+    /**
+     * Populate the available users
+     */
+    saveAvailableUsers: (value: (UserSnapshot | User)[]) => {
+      if (self.availableUsers) {
+        if (value) {
+          self.currentUser = UserModel.create(value[0]) // set a default user
+          self.availableUsers.replace(value as any)
+        } else {
+          self.availableUsers.clear()
+        }
+      } else {
+        self.availableUsers = value as any
+      }
+    },
+  }))
+  .actions((self) => ({
+    /**
+     * Get the available users list
+     */
     getUsers: flow(function* () {
       const result: GetUsersResult = yield self.environment.api.getUsers()
 
       if (result.kind === "ok") {
-        const { user } = result
-        self.saveCurrentUser(user)
+        const { users } = result
+        self.saveAvailableUsers(users)
       } else {
         __DEV__ && console.tron.log(result.kind)
       }
