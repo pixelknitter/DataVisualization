@@ -13,7 +13,7 @@ export const useUsers = () => {
     setLoading(true)
     await userStore
       .getUsers()
-      .then(() => setUsers(userStore.users))
+      .then(() => setUsers(userStore.availableUsers))
       .then(() => setCurrentUser(userStore.currentUser))
       .catch((e) => console.tron.error(e.message, e.stack))
       // ensure we stop loading when call is finished regardless of success/fail

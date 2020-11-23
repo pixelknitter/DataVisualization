@@ -1,29 +1,37 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
-import { FlatList, ViewStyle } from "react-native"
+import { FlatList, TextStyle, ViewStyle } from "react-native"
 import { Screen, Text, UserRow } from "../../components"
 // import { useNavigation } from "@react-navigation/native"
-import { color } from "../../theme"
+import { color, spacing } from "../../theme"
 import { useUsers } from "../../utils/hooks"
 import { User } from "../../models"
 
 const ROOT: ViewStyle = {
-  backgroundColor: color.palette.black,
+  display: "flex",
   flex: 1,
+  backgroundColor: color.palette.charcoal,
+  alignItems: "center",
+}
+const HEADER: TextStyle = {
+  margin: spacing[2],
 }
 
 const renderItem = ({ item }: { item: User }) => <UserRow user={item} />
+const extractor = (item) => item.id
 
 export const UsersScreen = observer(function UsersScreen() {
   const { users, loadAsync, loading } = useUsers()
 
+  if (loading) return null
+  __DEV__ && console.tron.debug(`current users: ${users}`)
   // Pull in navigation via hook
   // const navigation = useNavigation()
   return (
     <Screen style={ROOT} preset="fixed">
-      <Text preset="header" text="Select User" />
+      <Text style={HEADER} preset="header" text="Select A User" />
       <FlatList
-        keyExtractor={(item) => item.id}
+        keyExtractor={extractor}
         data={users}
         refreshing={loading}
         onRefresh={loadAsync}

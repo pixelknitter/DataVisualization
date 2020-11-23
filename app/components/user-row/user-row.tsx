@@ -27,7 +27,6 @@ export const UserRow: React.FunctionComponent<UserRowProps> = (props) => {
   })
 
   // merge the styling to account for the different rows based upon user row
-  const NAME_STYLE = mergeAll(flatten([styles.USER_TEXT, { color: color.palette.angry }]))
   const CONTAINER_STYLE = mergeAll(
     flatten([
       styles.CONTAINER,
@@ -47,7 +46,7 @@ export const UserRow: React.FunctionComponent<UserRowProps> = (props) => {
           source={{ uri: user.avatar }}
           placeholderColor={color.palette.orange}
         />
-        <Text style={NAME_STYLE} text={user.name} />
+        <Text style={styles.USER_TEXT} text={user.name} />
       </View>
     </Animated.View>
   )

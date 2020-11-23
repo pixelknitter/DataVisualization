@@ -3,16 +3,17 @@ import { color, spacing } from "../../theme"
 
 const IMAGE_SIZE = 80
 const CONTAINER_HEIGHT = 100
-const FONT_SIZE = 18
+const FONT_SIZE = 24
 
 export const userRowStyles = {
   CONTAINER: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "flex-end",
+    alignItems: "center",
     height: CONTAINER_HEIGHT,
     padding: spacing[2] + spacing[1],
     backgroundColor: color.background,
+    width: "100%",
   } as ViewStyle,
   RIGHT_CONTAINER: {
     alignItems: "flex-end",
@@ -27,7 +28,7 @@ export const userRowStyles = {
   } as ImageStyle,
   USER_TEXT: {
     fontSize: FONT_SIZE,
-    fontWeight: "500",
-    color: color.palette.orange,
+    fontWeight: "bold",
+    color: color.palette.seaGreen,
   } as TextStyle,
 }
