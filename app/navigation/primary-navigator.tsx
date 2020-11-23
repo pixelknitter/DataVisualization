@@ -7,7 +7,7 @@
 import React from "react"
 
 import { createNativeStackNavigator } from "react-native-screens/native-stack"
-import { UsersScreen, WelcomeScreen } from "../screens"
+import { UsersScreen, WelcomeScreen, IntervalScreen } from "../screens"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -24,6 +24,7 @@ import { UsersScreen, WelcomeScreen } from "../screens"
 export type PrimaryParamList = {
   welcome: undefined
   users: undefined
+  intervals: undefined
 }
 
 // Documentation: https://github.com/software-mansion/react-native-screens/tree/master/native-stack
@@ -39,6 +40,7 @@ export function PrimaryNavigator() {
     >
       <Stack.Screen name="welcome" component={WelcomeScreen} />
       <Stack.Screen name="users" component={UsersScreen} />
+      <Stack.Screen name="intervals" component={IntervalScreen} />
     </Stack.Navigator>
   )
 }
