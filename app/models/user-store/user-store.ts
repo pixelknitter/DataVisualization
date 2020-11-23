@@ -20,8 +20,9 @@ export const UserStoreModel = types
     /**
      * Populate the current user
      */
-    saveCurrentUser: (userSnapshot: UserSnapshot | User) => {
-      self.currentUser = UserModel.create(userSnapshot)
+    saveCurrentUser: (value: UserSnapshot | User) => {
+      __DEV__ && console.tron.debug(`setting a new user to: ${value}`)
+      self.currentUser = value as any
     },
     /**
      * Resets the store

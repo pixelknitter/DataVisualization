@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react"
-import { useStores } from "../../models"
+import { User, UserSnapshot, useStores } from "../../models"
 
 export const useUsers = () => {
   const { userStore } = useStores()
@@ -7,6 +7,14 @@ export const useUsers = () => {
   const [loading, setLoading] = useState(true)
   const [users, setUsers] = useState([])
   const [currentUser, setCurrentUser] = useState(null)
+
+  const saveCurrentUser = useCallback(
+    async (user: User | UserSnapshot) => {
+      userStore.saveCurrentUser(user)
+      setCurrentUser(user)
+    },
+    [userStore],
+  )
 
   const loadAsync = useCallback(async () => {
     // reset loading to true at start of the async call
@@ -31,5 +39,6 @@ export const useUsers = () => {
     currentUser,
     loading,
     loadAsync,
+    saveCurrentUser,
   }
 }

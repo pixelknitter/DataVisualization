@@ -1,5 +1,5 @@
 import React from "react"
-import { View, Animated } from "react-native"
+import { Animated, TouchableOpacity, TouchableOpacityProps, ViewStyle } from "react-native"
 import { AsyncImage, Text } from ".."
 import { userRowStyles as styles } from "./user-row.styles"
 import { User } from "../../models"
@@ -7,8 +7,9 @@ import { color } from "../../theme"
 import { useSpringEntryLeft } from "../../utils/hooks"
 import { mergeAll, flatten } from "ramda"
 
-export interface UserRowProps {
+export interface UserRowProps extends TouchableOpacityProps {
   user: User
+  style?: ViewStyle
 }
 
 /**
@@ -17,7 +18,7 @@ export interface UserRowProps {
  * Renders the details of a User to be selected
  */
 export const UserRow: React.FunctionComponent<UserRowProps> = (props) => {
-  const { user } = props
+  const { user, style } = props
   const { xDelta, opacity } = useSpringEntryLeft()
 
   // translation for the main view
@@ -30,8 +31,8 @@ export const UserRow: React.FunctionComponent<UserRowProps> = (props) => {
   const CONTAINER_STYLE = mergeAll(
     flatten([
       styles.CONTAINER,
+      style,
       {
-        backgroundColor: color.palette.offWhite,
         transform: [{ translateX }],
         opacity: opacity,
       },
@@ -39,15 +40,15 @@ export const UserRow: React.FunctionComponent<UserRowProps> = (props) => {
   )
 
   return (
-    <Animated.View style={CONTAINER_STYLE}>
-      <View style={styles.CONTAINER}>
+    <TouchableOpacity {...props}>
+      <Animated.View style={CONTAINER_STYLE}>
         <AsyncImage
           style={styles.IMAGE_LAYOUT}
           source={{ uri: user.avatar }}
-          placeholderColor={color.palette.orange}
+          placeholderColor={color.palette.richBlack}
         />
         <Text style={styles.USER_TEXT} text={user.name} />
-      </View>
-    </Animated.View>
+      </Animated.View>
+    </TouchableOpacity>
   )
 }

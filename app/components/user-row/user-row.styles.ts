@@ -12,7 +12,7 @@ export const userRowStyles = {
     alignItems: "center",
     height: CONTAINER_HEIGHT,
     padding: spacing[2] + spacing[1],
-    backgroundColor: color.background,
+    backgroundColor: color.storybookDarkBg,
     width: "100%",
   } as ViewStyle,
   RIGHT_CONTAINER: {
