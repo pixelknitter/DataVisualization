@@ -90,35 +90,31 @@ export class Api {
     // transform the data into the format we are expecting
     try {
       const rawIntervals = response.data.intervals
-      const resultIntervals: IntervalSnapshot[] = rawIntervals.intervals.map(convertInterval)
+      const resultIntervals: IntervalSnapshot[] = rawIntervals.map(convertInterval)
       return { kind: "ok", intervals: resultIntervals }
     } catch {
       return { kind: "bad-data" }
     }
   }
 
-  async getUsers(): Promise<Types.GetUserResult> {
+  async getUsers(): Promise<Types.GetUsersResult> {
     // make the *mock* api call
     const response = mockUserData.users
 
+    const convertUser = (raw: any): UserSnapshot => {
+      return {
+        id: raw.id,
+        name: raw.name,
+        avatar: raw.avatar,
+      }
+    }
+
     // transform the data into the format we are expecting
     try {
-      const resultUser: UserSnapshot = this.convertUser(response)
-      return { kind: "ok", user: resultUser }
+      const resultUsers: UserSnapshot[] = response.map(convertUser)
+      return { kind: "ok", users: resultUsers }
     } catch {
       return { kind: "bad-data" }
-    }
-  }
-
-  /**
-   * Converts an object into an MST acceptable UserSnapshot
-   * @param raw - the object to convert into a user
-   */
-  convertUser = (raw: any): UserSnapshot => {
-    return {
-      id: raw.id,
-      name: raw.name,
-      avatar: raw.avatar,
     }
   }
 }
