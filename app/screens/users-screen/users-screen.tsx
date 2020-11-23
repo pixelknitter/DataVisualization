@@ -20,7 +20,7 @@ export const UsersScreen = observer(function UsersScreen() {
   // Pull in navigation via hook
   // const navigation = useNavigation()
   return (
-    <Screen style={ROOT} preset="scroll">
+    <Screen style={ROOT} preset="fixed">
       <Text preset="header" text="Select User" />
       <FlatList
         keyExtractor={(item) => item.id}
