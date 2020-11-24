@@ -6,48 +6,63 @@ export enum Stage {
   light,
   deep,
 }
-
-const StageDuration = types.model("StageDuration", {
-  stage: types.enumeration(Object.keys(Stage)), // converts the keys to string array
+/**
+ * The amount of time the user stayed in a stage
+ */
+export const StageDurationModel = types.model("StageDuration", {
+  stage: types.enumeration(Object.keys(Stage).splice(4, 4)), // converts the keys to string array
   duration: types.number,
 })
 
-const SeriesValue = types.model("SeriesValue", {
+type StageDurationType = Instance<typeof StageDurationModel>
+export interface StageDuration extends StageDurationType {}
+type StageDurationSnapshotType = SnapshotOut<typeof StageDurationModel>
+export interface StageDurationSnapshot extends StageDurationSnapshotType {}
+
+/**
+ * The series time and value
+ */
+export const SeriesValueModel = types.model("SeriesValue", {
   time: types.Date,
   value: types.number,
 })
 
-const Timeseries = types.model("Timeseries", {
-  tnt: types.optional(types.array(SeriesValue), []),
-  tempRoomC: types.optional(types.array(SeriesValue), []),
-  tempBedC: types.optional(types.array(SeriesValue), []),
-  respiratoryRate: types.optional(types.array(SeriesValue), []),
-  heartRate: types.optional(types.array(SeriesValue), []),
-  heating: types.optional(types.array(SeriesValue), []),
-})
+type SeriesValueType = Instance<typeof SeriesValueModel>
+export interface SeriesValue extends SeriesValueType {}
+type SeriesValueSnapshotType = SnapshotOut<typeof SeriesValueModel>
+export interface SeriesValueSnapshot extends SeriesValueSnapshotType {}
 
 /**
- * Model description here for TypeScript hints.
+ * A timeseries of sensor data for the interval
+ */
+export const TimeseriesModel = types.model("Timeseries", {
+  tnt: types.optional(types.array(SeriesValueModel), []),
+  tempRoomC: types.optional(types.array(SeriesValueModel), []),
+  tempBedC: types.optional(types.array(SeriesValueModel), []),
+  respiratoryRate: types.optional(types.array(SeriesValueModel), []),
+  heartRate: types.optional(types.array(SeriesValueModel), []),
+  heating: types.optional(types.array(SeriesValueModel), []),
+})
+
+type TimeseriesType = Instance<typeof TimeseriesModel>
+export interface Timeseries extends TimeseriesType {}
+type TimeseriesSnapshotType = SnapshotOut<typeof TimeseriesModel>
+export interface TimeseriesSnapshot extends TimeseriesSnapshotType {}
+
+/**
+ * The interval of sleep conducted by the user with a collection of related data
  */
 export const IntervalModel = types
   .model("Interval")
   .props({
     id: types.optional(types.identifier, "-1"),
     ts: types.maybeNull(types.Date),
-    stages: types.maybeNull(types.array(StageDuration)),
+    stages: types.maybeNull(types.array(StageDurationModel)),
     score: types.optional(types.number, 0),
-    timeseries: types.maybeNull(types.reference(Timeseries)),
+    timeseries: types.maybeNull(TimeseriesModel),
   })
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
-
-/**
-  * Un-comment the following to omit model attributes from your snapshots (and from async storage).
-  * Useful for sensitive data like passwords, or transitive state like whether a modal is open.
-
-  * Note that you'll need to import `omit` from ramda, which is already included in the project!
-  *  .postProcessSnapshot(omit(["password", "socialSecurityNumber", "creditCardNumber"]))
-  */
 
 type IntervalType = Instance<typeof IntervalModel>
 export interface Interval extends IntervalType {}

@@ -2,8 +2,15 @@ import { ApisauceInstance, create, ApiResponse } from "apisauce"
 import { getGeneralApiProblem } from "./api-problem"
 import { ApiConfig, DEFAULT_API_CONFIG } from "./api-config"
 import * as Types from "./api.types"
-import { IntervalSnapshot, UserSnapshot } from "../../models"
+import {
+  IntervalSnapshot,
+  UserSnapshot,
+  StageDurationSnapshot,
+  TimeseriesSnapshot,
+  SeriesValueSnapshot,
+} from "../../models"
 import mockUserData from "./mock-user-data.json"
+import { parseJSON } from "date-fns"
 
 /**
  * Manages all requests to the API.
@@ -60,14 +67,14 @@ export class Api {
     }
 
     // convert the raw values into objects
-    const convertSeriesValue = (raw) => {
+    const convertSeriesValue = (raw): SeriesValueSnapshot => {
       return {
-        time: new Date(raw[0]),
+        time: parseJSON(raw[0]).getTime(),
         value: raw[1],
       }
     }
 
-    const convertTimeseries = (raw) => {
+    const convertTimeseries = (raw): TimeseriesSnapshot => {
       return {
         tnt: raw.tnt.map(convertSeriesValue),
         tempRoomC: raw.tempRoomC.map(convertSeriesValue),
@@ -78,11 +85,19 @@ export class Api {
       }
     }
 
-    const convertInterval = (raw) => {
+    const convertStageDuration = (raw): StageDurationSnapshot => {
+      return {
+        stage: raw.stage,
+        duration: raw.duration,
+      }
+    }
+
+    const convertInterval = (raw): IntervalSnapshot => {
       return {
         id: raw.id,
-        ts: new Date(raw.ts),
-        stages: raw.stages,
+        ts: parseJSON(raw.ts).getTime(),
+        stages: raw.stages.map(convertStageDuration),
+        score: raw.score,
         timeseries: convertTimeseries(raw.timeseries),
       }
     }
