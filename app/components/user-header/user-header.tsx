@@ -1,5 +1,5 @@
 import React from "react"
-import { View, Animated } from "react-native"
+import { View, Animated, TextStyle } from "react-native"
 import { Text, AsyncImage, Icon } from "../"
 import { userHeaderStyles as styles } from "./user-header.styles"
 import { User, useStores } from "../../models"
@@ -12,12 +12,18 @@ import { observer } from "mobx-react-lite"
 
 export interface UserHeaderProps {
   user?: User
+  sleepScore?: number
+}
+
+const SCORE_TEXT: TextStyle = {
+  color: color.palette.vibrantOrange,
+  fontSize: 20,
 }
 
 /**
  * User Header
  *
- * Renders a header with details about the CurrentUser. Accepts a User object.
+ * Renders a header with details about the CurrentUser.
  */
 export const UserHeader = observer(function UsersScreen(props: UserHeaderProps) {
   // grab the props
@@ -27,6 +33,10 @@ export const UserHeader = observer(function UsersScreen(props: UserHeaderProps) 
   const { opacity, xDelta } = useFadeInLeft()
   const navigation = useNavigation()
   const user = currentUser || props.user
+  const { sleepScore } = props
+
+  // formatting text
+  const formattedSleepScore = `Avg Score: ${sleepScore.toFixed(0)}`
 
   __DEV__ && console.tron.debug(`header user: ${user.name}`)
 
@@ -60,6 +70,7 @@ export const UserHeader = observer(function UsersScreen(props: UserHeaderProps) 
       />
       <Animated.View style={RIGHT_CONTAINER}>
         <Text preset="header" text={user.name} />
+        <Text style={SCORE_TEXT} text={formattedSleepScore} />
       </Animated.View>
     </View>
   )

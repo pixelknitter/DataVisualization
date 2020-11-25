@@ -41,7 +41,7 @@ export const TimeseriesModel = types.model("Timeseries", {
   tempBedC: types.optional(types.array(SeriesValueModel), []),
   respiratoryRate: types.optional(types.array(SeriesValueModel), []),
   heartRate: types.optional(types.array(SeriesValueModel), []),
-  heating: types.optional(types.array(SeriesValueModel), []),
+  // heating: types.optional(types.array(SeriesValueModel), []),
 })
 
 type TimeseriesType = Instance<typeof TimeseriesModel>

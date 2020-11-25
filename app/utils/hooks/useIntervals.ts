@@ -5,14 +5,12 @@ export const useIntervals = () => {
   const { userStore, intervalStore } = useStores()
   // set initial state
   const [loading, setLoading] = useState(true)
-  const [data, setData] = useState([])
 
   const loadAsync = useCallback(async () => {
     // reset loading to true at start of the async call
     setLoading(true)
     await intervalStore
       .getIntervals(userStore.currentUser.id)
-      .then(() => setData(intervalStore.intervals))
       .catch((e) => console.tron.error(e.message, e.stack))
       // ensure we stop loading when call is finished regardless of success/fail
       .finally(() => setLoading(false))
@@ -25,7 +23,7 @@ export const useIntervals = () => {
   }, [loadAsync, loading])
 
   return {
-    data,
+    intervalStore,
     loading,
     loadAsync,
   }

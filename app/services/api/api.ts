@@ -81,7 +81,7 @@ export class Api {
         tempBedC: raw.tempBedC.map(convertSeriesValue),
         respiratoryRate: raw.respiratoryRate.map(convertSeriesValue),
         heartRate: raw.heartRate.map(convertSeriesValue),
-        heating: raw.heating.map(convertSeriesValue),
+        // heating: raw.heating.map(convertSeriesValue),
       }
     }
 

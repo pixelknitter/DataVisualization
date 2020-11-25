@@ -15,7 +15,32 @@ export const IntervalStoreModel = types
   })
   .extend(withEnvironment)
   .extend(withRootStore)
-  .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .views((self) => ({
+    getStages: () => {
+      __DEV__ && console.tron.debug(`${self.currentIntervals[0].stages}`)
+    },
+    /**
+     * Returns the average sleep score across current intervals
+     */
+    getAverageSleepScore: (): number => {
+      if (!self.currentIntervals) return 0
+
+      const avgScore: number =
+        self.currentIntervals.reduce(
+          (accumulator, currentItem) => accumulator + currentItem.score,
+          0,
+        ) / self.currentIntervals.length
+      __DEV__ && console.tron.debug(`sleep score avg: ${avgScore}`)
+      return avgScore
+    },
+
+    getIntervalCount: (): number => {
+      if (!self.currentIntervals) return 0
+      const currentCount = self.currentIntervals.length
+      __DEV__ && console.tron.debug(`current interval count: ${currentCount}`)
+      return currentCount
+    },
+  })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
     /**
      * Populate the intervals of a user
