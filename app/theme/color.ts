@@ -50,6 +50,16 @@ export const color = {
   error: palette.angry,
 
   /**
+   * Colors of the different stages
+   */
+  stages: {
+    out: palette.vibrantOrange,
+    awake: palette.orange,
+    light: palette.seaGreen,
+    deep: palette.tealBlue,
+  },
+
+  /**
    * Storybook background for Text stories, or any stories where
    * the text color is color.text, which is white by default, and does not show
    * in Stories against the default white background

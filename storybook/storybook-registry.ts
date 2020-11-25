@@ -1,3 +1,5 @@
+require("../app/components/timeseries-chart/timeseries-chart.story")
+require("../app/components/stages-chart/stages-chart.story")
 require("../app/components/loader/loader.story")
 require("../app/components/text/text.story")
 require("../app/components/button/button.story")
