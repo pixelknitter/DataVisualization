@@ -21,6 +21,9 @@ Currently includes (from [Infinite Red](https://github.com/infinitered/ignite-bo
 
 ## Quick Start
 
+Demonstration:
+![demonstration](demo/sleep-data-demo.gif)
+
 ### Launching Dev
 
 This project is currently _not_ configured for production builds of the application. As such you will need to follow a few steps to get up and running:
