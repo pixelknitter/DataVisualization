@@ -7,6 +7,7 @@ import { flatten, mergeAll } from "ramda"
 import { color, spacing } from "../../theme"
 import { Text } from "../text/text"
 // import { Circle, G, Line, Rect, Text as SVGText } from "react-native-svg"
+import { Timeseries } from "../../models/interval/interval"
 
 // styles
 const CONTAINER: ViewStyle = {
@@ -26,6 +27,7 @@ const INSET = { top: spacing[3], bottom: spacing[3] }
 
 export interface StagesChartProps extends ChartProps<any> {
   title?: string
+  decoratorData?: Timeseries
 }
 
 const stageDepth = {
@@ -36,15 +38,14 @@ const stageDepth = {
 }
 
 /**
- * Sleep statistics pie chart
+ * Sleep stages represented in colorful lines with decorators (TBD)
  */
 export const StagesChart = observer(function StagesChart(props: StagesChartProps) {
   const CONTAINER_STYLE = mergeAll(flatten([CONTAINER]))
-  const { data, title } = props
+  const { data, title, decoratorData } = props
   const hasTitle = title && title.length > 1
 
-  __DEV__ && console.tron.debug(`has a title ${title}: ${hasTitle}`)
-
+  // transforms the data into chart relevant data with svgs
   const chartData = data.map((item, index, array) => {
     const transform = {
       data: [
@@ -67,30 +68,24 @@ export const StagesChart = observer(function StagesChart(props: StagesChartProps
     return transform
   })
 
-  // const Tooltip = ({ x, y }) => (
-  //   <G x={x(5) - 75 / 2} key={"tooltip"} onPress={() => console.log("tooltip clicked")}>
-  //     <G y={50}>
-  //       <Rect height={40} width={75} stroke={"grey"} fill={"white"} ry={10} rx={10} />
-  //       <SVGText
-  //         x={75 / 2}
-  //         dy={20}
-  //         alignmentBaseline={"middle"}
-  //         textAnchor={"middle"}
-  //         stroke={"rgb(134, 65, 244)"}
-  //       >
-  //         {`${data[5]}ºC`}
-  //       </SVGText>
-  //     </G>
-  //     <G x={75 / 2}>
-  //       <Line y1={50 + 40} y2={y(data[5])} stroke={"grey"} strokeWidth={2} />
-  //       <Circle cy={y(data[5])} r={6} stroke={"rgb(134, 65, 244)"} strokeWidth={2} fill={"white"} />
-  //     </G>
-  //   </G>
-  // )
+  const renderDecorators = () => {
+    if (decoratorData) return null
 
-  // const chartData = data.map((item) => item.slice.finish)
-
-  __DEV__ && console.tron.debug(`chart Data: ${JSON.stringify(chartData)} ${chartData.length}`)
+    // TODO: substitute stroke w/ a KEY map from timeseries data
+    // TODO: sub y value for current stage value
+    // TODO: sub x with time series date
+    // TODO: text with time series value
+    // return decoratorData.map((value, index) => (
+    //   <Circle
+    //     key={index}
+    //     cx={value}
+    //     cy={0}
+    //     r={4}
+    //     stroke={"rgb(134, 65, 244)"}
+    //     fill={"rgb(0,0,0,0)"}
+    //   />
+    // ))
+  }
 
   return (
     <View style={CONTAINER_STYLE}>
@@ -105,11 +100,13 @@ export const StagesChart = observer(function StagesChart(props: StagesChartProps
           style={CHART}
           data={chartData}
           xScale={scaleTime}
+          yMax={1}
+          yMin={-2}
           xAccessor={({ item }) => item.x}
           yAccessor={({ item }) => item.y}
           contentInset={INSET}
         >
-          {/* <Tooltip y={0} x={new Date(1489047960000)} /> */}
+          {/* {renderDecorators()} */}
         </LineChart>
       </View>
     </View>

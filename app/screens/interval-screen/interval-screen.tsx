@@ -27,9 +27,8 @@ export const IntervalScreen = observer(() => {
   if (loading) return <Loader message="Collecting your sleep intervals..." />
   const sessionCount = intervalStore.getIntervalCount()
   const stageSessions = intervalStore.getStageSessions()
+  const { currentIntervals } = intervalStore
 
-  // Pull in navigation via hook
-  // const navigation = useNavigation()
   return (
     <Screen style={ROOT} preset="scroll">
       <UserHeader sleepScore={intervalStore.getAverageSleepScore()} sessionCount={sessionCount} />
@@ -39,6 +38,7 @@ export const IntervalScreen = observer(() => {
             key={index}
             style={CHART}
             data={session}
+            decoratorData={currentIntervals[index].timeseries}
             title={`Stages for ${intervalStore.currentIntervals[index].ts}`}
           />
         ))}

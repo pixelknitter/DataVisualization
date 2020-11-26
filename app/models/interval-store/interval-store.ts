@@ -4,6 +4,7 @@ import { withEnvironment, withRootStore } from ".."
 import { GetIntervalsResult } from "../../services/api"
 import { Interval, IntervalSnapshot, IntervalModel } from "../interval/interval"
 
+type StageTimeseries = { slice: { start: Date; finish: Date }; stage: string }
 /**
  * Sleep sessions for the current user
  */
@@ -16,7 +17,10 @@ export const IntervalStoreModel = types
   .extend(withEnvironment)
   .extend(withRootStore)
   .views((self) => ({
-    getStageSessions: (): any[] => {
+    /**
+     * Returns stage sessions in a time series with start and ending
+     */
+    getStageSessions: (): StageTimeseries[][] => {
       if (!self.currentIntervals) return null
       const sessions = self.currentIntervals
 
@@ -38,6 +42,7 @@ export const IntervalStoreModel = types
           }
         })
 
+        // lazily calculates the duration of a session when this is first called
         session.setDuration(sessionDuration)
         return slicedStages
       })
