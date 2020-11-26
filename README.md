@@ -1,20 +1,62 @@
-# DataVisualization
+# Sleep Data Visualization Demonstration
 
 [![CircleCI](https://circleci.com/gh/infinitered/ignite-bowser.svg?style=svg)](https://circleci.com/gh/infinitered/ignite-bowser)
 
-## The latest and greatest boilerplate for Infinite Red opinions
+## Technologies Used
 
-This is the boilerplate that [Infinite Red](https://infinite.red) uses as a way to test bleeding-edge changes to our React Native stack.
+This project was started with Ignite from Infinite Red as it provides generators to rapidly build and hook up components, screens, and more. It also provides some solid practices around project organization and optimizations for quicker debugging.
 
-Currently includes:
+Currently includes (from [Infinite Red](https://github.com/infinitered/ignite-bowser#about-the-stack) boilerplate):
 
 - React Native
 - React Navigation
 - MobX State Tree
 - TypeScript
-- And more!
+- and more!
+
+### Additonal Libraries
+
+- [react-native-svg-charts](https://github.com/JesperLekland/react-native-svg-charts) - for simple visualizations
+- [date-fns](https://date-fns.org/) - for date formatting and parsing
 
 ## Quick Start
+
+### Launching Dev
+
+This project is currently _not_ configured for production builds of the application. As such you will need to follow a few steps to get up and running:
+
+1. set up your development environment via the [React Native docs](https://reactnative.dev/docs/environment-setup).
+2. install [yarn](https://yarnpkg.com/getting-started/install).
+3. set up a [simulator/emulator](https://developer.android.com/studio/run/managing-avds.html) or on [device](https://reactnative.dev/docs/running-on-device)
+4. install dependencies: `yarn install`
+5. launch the application: `yarn android` or `yarn ios`
+
+If you want to see more about the inner workings, this is hooked up with [Reactotron](https://github.com/infinitered/reactotron) in which you can explore some of the logging and state management.
+
+## For Reference
+
+Some things to note in this project:
+
+- sleep stages are mapped such (they currently lack labels):
+  - out = bright orange (1)
+  - awake = orange (0)
+  - light = green (-1)
+  - deep = blue (-2)
+
+## Reflections
+
+The core of the application works and demonstrates competency, however, there are certainly some things I'd love to do to it that I deprioritized due to time constraints:
+
+- clean up date formatting for stages
+- fix the scrollview for session visuals
+- add decorators with the timeseries data
+- add labels for the stages (start time, finish time are already there)
+- add axis labels for stages (stages with colors for the y-axis and time window for the x-axis)
+- add session length visually
+
+Time spent on project: 12 hrs (includes research, design, and environment issues)
+
+## Exploring the Project
 
 The Ignite Bowser boilerplate project's structure will look similar to this:
 
@@ -131,12 +173,3 @@ This starts up the storybook server.
 
 In `index.js`, change `SHOW_STORYBOOK` to `true` and reload the app.
 For Visual Studio Code users, there is a handy extension that makes it easy to load Storybook use cases into a running emulator via tapping on items in the editor sidebar. Install the `React Native Storybook` extension by `Orta`, hit `cmd + shift + P` and select "Reconnect Storybook to VSCode". Expand the STORYBOOK section in the sidebar to see all use cases for components that have `.story.tsx` files in their directories.
-
-## Previous Boilerplates
-
-- [2017 aka Andross](https://github.com/infinitered/ignite-andross)
-- [2016 aka Ignite 1.0](https://github.com/infinitered/ignite-ir-boilerplate-2016)
-
-## Premium Support
-
-[Ignite CLI](https://infinite.red/ignite), [Ignite Andross](https://github.com/infinitered/ignite-andross), and [Ignite Bowser](https://github.com/infinitered/ignite-bowser), as open source projects, are free to use and always will be. [Infinite Red](https://infinite.red/) offers premium Ignite support and general mobile app design/development services. Email us at [hello@infinite.red](mailto:hello@infinite.red) to get in touch with us for more details.
