@@ -58,7 +58,7 @@ The core of the application works and demonstrates competency, however, there ar
 - add axis labels for stages (stages with colors for the y-axis and time window for the x-axis)
 - add session length visually
 - fix and add tests for complete coverage
-- clean up storybooks to
+- clean up the storybooks
 
 Time spent on project: 12 hrs (includes research, design, and environment issues)
 
