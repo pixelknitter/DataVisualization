@@ -1,5 +1,5 @@
 import React from "react"
-import { View, Animated, TextStyle } from "react-native"
+import { View, Animated, TextStyle, ViewStyle } from "react-native"
 import { Text, AsyncImage, Icon } from "../"
 import { userHeaderStyles as styles } from "./user-header.styles"
 import { User, useStores } from "../../models"
@@ -13,11 +13,16 @@ import { observer } from "mobx-react-lite"
 export interface UserHeaderProps {
   user?: User
   sleepScore?: number
+  sessionCount?: number
 }
 
 const SCORE_TEXT: TextStyle = {
   color: color.palette.vibrantOrange,
   fontSize: 20,
+}
+
+const ICON = {
+  backgroundColor: color.palette.black,
 }
 
 /**
@@ -33,10 +38,11 @@ export const UserHeader = observer(function UsersScreen(props: UserHeaderProps) 
   const { opacity, xDelta } = useFadeInLeft()
   const navigation = useNavigation()
   const user = currentUser || props.user
-  const { sleepScore } = props
+  const { sleepScore, sessionCount } = props
 
   // formatting text
-  const formattedSleepScore = `Avg Score: ${sleepScore.toFixed(0)}`
+  const formattedSleepScore = (sleepScore && `Avg Score: ${sleepScore.toFixed(0)}`) || "N/A"
+  const formattedSessionCount = (sessionCount && `Recorded Sessions: ${sessionCount}`) || "N/A"
 
   __DEV__ && console.tron.debug(`header user: ${user.name}`)
 
@@ -60,7 +66,7 @@ export const UserHeader = observer(function UsersScreen(props: UserHeaderProps) 
 
   return (
     <View style={styles.CONTAINER}>
-      <Button onPress={() => navigation.goBack()}>
+      <Button style={ICON} onPress={() => navigation.goBack()}>
         <Icon icon={"back"} />
       </Button>
       <AsyncImage
@@ -71,6 +77,7 @@ export const UserHeader = observer(function UsersScreen(props: UserHeaderProps) 
       <Animated.View style={RIGHT_CONTAINER}>
         <Text preset="header" text={user.name} />
         <Text style={SCORE_TEXT} text={formattedSleepScore} />
+        <Text style={SCORE_TEXT} text={formattedSessionCount} />
       </Animated.View>
     </View>
   )

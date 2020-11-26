@@ -59,10 +59,16 @@ export const IntervalModel = types
     ts: types.maybeNull(types.Date),
     stages: types.maybeNull(types.array(StageDurationModel)),
     score: types.optional(types.number, 0),
+    duration: types.optional(types.number, 0),
     timeseries: types.maybeNull(TimeseriesModel),
   })
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
-  .actions((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .actions((self) => ({
+    setDuration: (value: number) => {
+      if (!value) return
+      self.duration = value
+    },
+  })) // eslint-disable-line @typescript-eslint/no-unused-vars
 
 type IntervalType = Instance<typeof IntervalModel>
 export interface Interval extends IntervalType {}

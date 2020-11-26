@@ -5,7 +5,7 @@ import { GetIntervalsResult } from "../../services/api"
 import { Interval, IntervalSnapshot, IntervalModel } from "../interval/interval"
 
 /**
- * Model description here for TypeScript hints.
+ * Sleep sessions for the current user
  */
 export const IntervalStoreModel = types
   .model("IntervalStore")
@@ -16,8 +16,33 @@ export const IntervalStoreModel = types
   .extend(withEnvironment)
   .extend(withRootStore)
   .views((self) => ({
-    getStages: () => {
-      __DEV__ && console.tron.debug(`${self.currentIntervals[0].stages}`)
+    getStageSessions: (): any[] => {
+      if (!self.currentIntervals) return null
+      const sessions = self.currentIntervals
+
+      const stageSessions = sessions.map((session) => {
+        const stages = session.stages
+
+        // for each stage slice, capture the start and end times
+        let sessionDuration = session.ts.getTime()
+
+        const slicedStages = stages.map((item) => {
+          const startTime = sessionDuration
+          sessionDuration += item.duration * 1000
+          return {
+            slice: {
+              start: new Date(startTime),
+              finish: new Date(sessionDuration),
+            },
+            stage: item.stage,
+          }
+        })
+
+        session.setDuration(sessionDuration)
+        return slicedStages
+      })
+      __DEV__ && console.tron.debug(`stage sessions: ${JSON.stringify(stageSessions)}`)
+      return stageSessions
     },
     /**
      * Returns the average sleep score across current intervals
@@ -33,7 +58,23 @@ export const IntervalStoreModel = types
       __DEV__ && console.tron.debug(`sleep score avg: ${avgScore}`)
       return avgScore
     },
+    /**
+     * Returns the average sleep score across current intervals
+     */
+    getAverageSessionLength: (): number => {
+      if (!self.currentIntervals) return 0
 
+      const avgSessionLength: number =
+        self.currentIntervals.reduce(
+          (accumulator, currentItem) => accumulator + currentItem.duration,
+          0,
+        ) / self.currentIntervals.length
+      __DEV__ && console.tron.debug(`avg session length: ${avgSessionLength}`)
+      return avgSessionLength
+    },
+    /**
+     * Returns the number of sessions collected
+     */
     getIntervalCount: (): number => {
       if (!self.currentIntervals) return 0
       const currentCount = self.currentIntervals.length

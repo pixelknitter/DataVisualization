@@ -98,6 +98,7 @@ export class Api {
         ts: parseJSON(raw.ts).getTime(),
         stages: raw.stages.map(convertStageDuration),
         score: raw.score,
+        duration: 0,
         timeseries: convertTimeseries(raw.timeseries),
       }
     }
