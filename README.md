@@ -22,6 +22,7 @@ Currently includes (from [Infinite Red](https://github.com/infinitered/ignite-bo
 ## Quick Start
 
 Demonstration:
+
 ![demonstration](demo/sleep-data-demo.gif)
 
 ### Launching Dev
@@ -51,11 +52,13 @@ Some things to note in this project:
 The core of the application works and demonstrates competency, however, there are certainly some things I'd love to do to it that I deprioritized due to time constraints:
 
 - clean up date formatting for stages
-- fix the scrollview for session visuals
+- fix the `Scrollview` for session visuals or switch to a `Flatlist`
 - add decorators with the timeseries data
 - add labels for the stages (start time, finish time are already there)
 - add axis labels for stages (stages with colors for the y-axis and time window for the x-axis)
 - add session length visually
+- fix and add tests for complete coverage
+- clean up storybooks to
 
 Time spent on project: 12 hrs (includes research, design, and environment issues)
 
