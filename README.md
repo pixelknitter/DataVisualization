@@ -52,15 +52,55 @@ Some things to note in this project:
 The core of the application works and demonstrates competency, however, there are certainly some things I'd love to do to it that I deprioritized due to time constraints:
 
 - clean up date formatting for stages
-- fix the `Scrollview` for session visuals or switch to a `Flatlist`
+- fix the `Scrollview` for sleep stages charts or switch to a `Flatlist`
 - add decorators with the timeseries data
 - add labels for the stages (start time, finish time are already there)
 - add axis labels for stages (stages with colors for the y-axis and time window for the x-axis)
 - add session length visually
 - fix and add tests for complete coverage
-- clean up the storybooks
+- clean up the storybooks to make components easily explorable
 
-Time spent on project: 12 hrs (includes research, design, and environment issues)
+Time spent on project: 12 hrs (includes research, design, a few environment issues, and implementation)
+
+### Follow-Up Critique
+
+- clean up the conditionals that can be improved with optional-chaining
+
+```typescript
+// verbose
+const hasTitle = title && title.length > 1
+// concise
+const hasTitle = title?.length > 1
+```
+
+- fix MST store type-safety, a few default to `any`
+  - strategy: enable strict-mode in linter (not allowing `any` type) and resolve errors
+- fix types for `stage-chart.tsx` to minimize type-based errors and improve DX (dev experience)
+- migrate styles to use `StyleSheet` or similar creation patterns removing the need to use `ramda` to merge styles
+  - see example in `interval-screen.tsx`
+- in most cases, `async` `await` statements could be within a `try/catch` block avoiding less readable promise-chaining
+- `async-image` could have a cleaner image swap for placeholder or other animated effect with a simple shape
+- examples of the styles with an updated pattern:
+
+```JSX
+<Component style={[style,
+  styles.placeholder, // this uses the StyleSheet pattern described above for improved type-safety
+  {
+    backgroundColor: placeholderColor,
+    opacity: placeholderOpacity,
+    transform: [{ scale: placeholderScale }],
+}]}/>
+```
+
+- add proper type-safety to `api.ts` for `getIntervals` and `getUsers`
+- abstract creation of animated value to a custom hook `useAnimatedValue` used often in `useImplosionExplosion` as it's a common pattern for animation
+- update the project so it can run properly in newer environments. It currently fails to compile on newer versions of iOS and Node.
+- enforce using `import type` patterns with lint-rules to safeguard against edge-case problems and improved optimizations
+  - see example of usage in `interval-store.ts`
+  - see a decent write-up/summary of benefits on [stackoverflow](https://stackoverflow.com/questions/61412000/do-i-need-to-use-the-import-type-feature-of-typescript-3-8-if-all-of-my-import) with reference to documentation
+- migrate away from `index.ts` export modules for root folders as it can lead to import require cycles.
+  - potential strategy: employ absolute path import aliases to reduce messy nesting and improve readability (see example from [nextjs docs](https://nextjs.org/docs/advanced-features/module-path-aliases))
+  - alternative strategy: move common imports into private modules that are managed with your package manager
 
 ## Exploring the Project
 

@@ -1,25 +1,10 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
-import { View, ViewStyle } from "react-native"
+import { StyleSheet, View } from "react-native"
 import { Loader, StagesChart, Screen, UserHeader } from "../../components"
 import { useIntervals } from "../../utils/hooks"
 import { color } from "../../theme"
 import { spacing } from "../../theme/spacing"
-
-const ROOT: ViewStyle = {
-  backgroundColor: color.palette.charcoal,
-  flex: 1,
-}
-
-const CHART_CONTAINER: ViewStyle = {
-  display: "flex",
-  alignContent: "space-between",
-}
-
-const CHART = {
-  height: 200,
-  margin: spacing[2],
-}
 
 export const IntervalScreen = observer(() => {
   const { intervalStore, loading } = useIntervals()
@@ -30,13 +15,13 @@ export const IntervalScreen = observer(() => {
   const { currentIntervals } = intervalStore
 
   return (
-    <Screen style={ROOT} preset="scroll">
+    <Screen style={styles.root} preset="scroll">
       <UserHeader sleepScore={intervalStore.getAverageSleepScore()} sessionCount={sessionCount} />
-      <View style={CHART_CONTAINER}>
+      <View style={styles.chartContainer}>
         {stageSessions.map((session, index) => (
           <StagesChart
             key={index}
-            style={CHART}
+            style={styles.chart}
             data={session}
             decoratorData={currentIntervals[index].timeseries}
             title={`Stages for ${intervalStore.currentIntervals[index].ts}`}
@@ -45,4 +30,19 @@ export const IntervalScreen = observer(() => {
       </View>
     </Screen>
   )
+})
+
+const styles = StyleSheet.create({
+  chart: {
+    height: 200,
+    margin: spacing[2],
+  },
+  chartContainer: {
+    display: "flex",
+    alignContent: "space-between",
+  },
+  root: {
+    backgroundColor: color.palette.charcoal,
+    flex: 1,
+  },
 })

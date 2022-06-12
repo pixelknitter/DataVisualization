@@ -2,7 +2,8 @@
 import { flow, Instance, SnapshotOut, types } from "mobx-state-tree"
 import { withEnvironment, withRootStore } from ".."
 import { GetIntervalsResult } from "../../services/api"
-import { Interval, IntervalSnapshot, IntervalModel } from "../interval/interval"
+import type { Interval, IntervalSnapshot } from "../interval/interval"
+import { IntervalModel } from "../interval/interval"
 
 type StageTimeseries = { slice: { start: Date; finish: Date }; stage: string }
 /**

@@ -5,8 +5,8 @@ export const useUsers = () => {
   const { userStore } = useStores()
   // set initial state
   const [loading, setLoading] = useState(true)
-  const [users, setUsers] = useState([])
-  const [currentUser, setCurrentUser] = useState(null)
+  const [users, setUsers] = useState<User[]>([])
+  const [currentUser, setCurrentUser] = useState<User | null>(null)
 
   const saveCurrentUser = useCallback(
     async (user: User | UserSnapshot) => {
